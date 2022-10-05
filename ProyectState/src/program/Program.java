@@ -29,7 +29,7 @@ public class Program {
 		
 		game.lblPoblation.setText("Poblation: "+state.getPoblation()+ " peoples ");
 		
-			
+		
 		
 		
 		

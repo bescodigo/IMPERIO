@@ -22,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 
 public class Window extends JFrame{
@@ -51,7 +52,7 @@ public class Window extends JFrame{
 		panelStates.setBackground(Color.white);
 		panelStates.setLayout(new BoxLayout(panelStates, BoxLayout.PAGE_AXIS));
 		
-		this.setBounds(0, 0, screenSize.width, screenSize.height);
+		this.setBounds(0, 0, screenSize.width, screenSize.height-100);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		lblTerritory = new JLabel("territory");
@@ -81,18 +82,77 @@ public class Window extends JFrame{
 		
 		
 		contenedor.add(panelStates, BorderLayout.NORTH);
-		contenedor.add(panelbtns, BorderLayout.CENTER);
+		contenedor.add(panelbtns, BorderLayout.SOUTH);
 		
 	}
 
 	public void setCard(String Event, int indexEventoAleatorio, State state, Event event2) {
 		
 		CardEvent nombreEvento = new CardEvent(Event);
-		
-		panelbtns.add(nombreEvento);
+		success = new Success(state);
+		contenedor.add(nombreEvento, BorderLayout.CENTER);
 		
 		btnYes = new JButton("Yes");
 		btnNot = new JButton("Not");
+		
+		
+		updateStatusBar(state);
+		
+		
+		
+		
+		btnYes.addMouseListener(new java.awt.event.MouseAdapter() {
+		    public void mouseEntered(java.awt.event.MouseEvent evt) {
+		        btnYes.setBackground(Color.GREEN);
+		        
+		        lblForce.setText("Force:      "+(state.getForce()+success.stateAtribute[indexEventoAleatorio][0].force)+" soldiers ");
+				   
+				lblTerritory.setText("Territory:   "+(state.getTerritory()+success.stateAtribute[indexEventoAleatorio][0].territory)+ " mt2 ");
+				
+				lblPoblation.setText("Poblation: "+(state.getPoblation()+success.stateAtribute[indexEventoAleatorio][0].poblation)+ " peoples ");
+
+				panelbtns.repaint();
+				contenedor.repaint();
+				btnYes.repaint();
+		        
+		    }
+		    public void mouseExited(java.awt.event.MouseEvent evt) {
+		        btnYes.setBackground(UIManager.getColor("control"));
+		        
+		        updateStatusBar(state);
+
+				panelbtns.repaint();
+				contenedor.repaint();
+				btnYes.repaint();
+		        
+		    }
+		});
+		
+		btnNot.addMouseListener(new java.awt.event.MouseAdapter() {
+		    public void mouseEntered(java.awt.event.MouseEvent evt) {
+		        btnNot.setBackground(Color.GREEN);
+		        lblForce.setText("Force:      "+(state.getForce()+success.stateAtribute[indexEventoAleatorio][1].force)+" soldiers ");
+				   
+				lblTerritory.setText("Territory:   "+(state.getTerritory()+success.stateAtribute[indexEventoAleatorio][1].territory)+ " mt2 ");
+				
+				lblPoblation.setText("Poblation: "+(state.getPoblation()+success.stateAtribute[indexEventoAleatorio][1].poblation)+ " peoples ");
+
+				panelbtns.repaint();
+				contenedor.repaint();
+				btnNot.repaint();
+			
+		    }
+		    public void mouseExited(java.awt.event.MouseEvent evt) {
+		        btnNot.setBackground(UIManager.getColor("control"));
+		       
+		        updateStatusBar(state);
+		        
+				panelbtns.repaint();
+				contenedor.repaint();
+				btnNot.repaint();
+		    }
+		});
+		
 		
 		btnYes.addActionListener(new ActionListener() {
 			
@@ -100,24 +160,22 @@ public class Window extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("event: "+Event);
 				
-				success = new Success(state);
+				
 				success.ejecuteConsecuense(indexEventoAleatorio, 0);
 				
-				//TODO: method to update statusBar.
-				lblForce.setText("Force:      "+state.getForce()+" soldiers ");
-				   
-				lblTerritory.setText("Territory:   "+state.getTerritory()+ " mt2 ");
 				
-				lblPoblation.setText("Poblation: "+state.getPoblation()+ " peoples ");
+				updateStatusBar(state);
 			
-				panelbtns.remove(nombreEvento);
+				contenedor.remove(nombreEvento);
 				panelbtns.remove(btnNot);
 				panelbtns.remove(btnYes);
 				
 				setCard(event2.listaEventos[event2.generateEvent()], event2.indexEventoAleatorio, state, event2);
 			
 				panelbtns.repaint();
+				contenedor.repaint();
 				
+				btnYes.repaint();
 			}
 		});
 		
@@ -130,19 +188,18 @@ public class Window extends JFrame{
 				success = new Success(state);
 				success.ejecuteConsecuense(indexEventoAleatorio, 1);
 				
-				lblForce.setText("Force:      "+state.getForce()+" soldiers ");
-				   
-				lblTerritory.setText("Territory:   "+state.getTerritory()+ " mt2 ");
-				
-				lblPoblation.setText("Poblation: "+state.getPoblation()+ " peoples ");
+				updateStatusBar(state);
 
-				panelbtns.remove(nombreEvento);
+				contenedor.remove(nombreEvento);
 				panelbtns.remove(btnNot);
 				panelbtns.remove(btnYes);
 				
 				setCard(event2.listaEventos[event2.generateEvent()], event2.indexEventoAleatorio, state, event2);
-				panelbtns.repaint();
 				
+				panelbtns.repaint();
+				contenedor.repaint();
+				
+				btnNot.repaint();
 			}
 		});
 		
@@ -150,8 +207,16 @@ public class Window extends JFrame{
 		panelbtns.add(btnYes);
 		
 	}
-
 	
+
+	public void updateStatusBar(State state) {
+		
+		lblForce.setText("Force:      "+state.getForce()+" soldiers ");
+		   
+		lblTerritory.setText("Territory:   "+state.getTerritory()+ " Km2 ");
+		
+		lblPoblation.setText("Poblation: "+state.getPoblation()+ " peoples ");
+	}
 	
 	
 }

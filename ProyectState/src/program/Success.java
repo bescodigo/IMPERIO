@@ -15,7 +15,7 @@ public class Success {
 		// Una bestia salvaje ataca al pueblo por las noches. Mandar cazadores a matarlo en su cueva?.
 		{new StateAtribute(300,-100,7000), new StateAtribute(-700,20,-200)},
 		// Nuestro ejército es debil. Invertir en armamento y soldados?.
-		{new StateAtribute(-10500,10000,2000), new StateAtribute(500,-300,-4000)},
+		{new StateAtribute(-5500,10000,2000), new StateAtribute(500,-300,-4000)},
 		
 	};
 	
