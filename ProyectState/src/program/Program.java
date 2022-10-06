@@ -11,27 +11,14 @@ public class Program {
 		
 		Window game = new Window();
 		State state = new State();
-	
-		Event event;
+		Event event = new Event();
 		
 		game.setVisible(true);
 		
-		event = new Event();
 			
 		int indexEventoAleatorio = event.generateEvent();
 		
 		game.setCard(event.listaEventos[indexEventoAleatorio], indexEventoAleatorio,state, event); 
-		
-		
-		game.lblForce.setText("Force:      "+state.getForce()+" soldiers ");
-		   
-		game.lblTerritory.setText("Territory:   "+state.getTerritory()+ " Km2 ");
-		
-		game.lblPoblation.setText("Poblation: "+state.getPoblation()+ " peoples ");
-		
-		
-		
-		
 		
 		
 

@@ -21,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -52,7 +53,7 @@ public class Window extends JFrame{
 		panelStates.setBackground(Color.white);
 		panelStates.setLayout(new BoxLayout(panelStates, BoxLayout.PAGE_AXIS));
 		
-		this.setBounds(0, 0, screenSize.width, screenSize.height-100);
+		this.setBounds(screenSize.width/6, screenSize.height/6, screenSize.width/4*3, screenSize.height/4*3);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		lblTerritory = new JLabel("territory");
@@ -88,7 +89,12 @@ public class Window extends JFrame{
 
 	public void setCard(String Event, int indexEventoAleatorio, State state, Event event2) {
 		
-		CardEvent nombreEvento = new CardEvent(Event);
+		String path = System.getProperty("user.dir");
+		
+		ImageIcon i = new ImageIcon(path+event2.listaEventosImg[indexEventoAleatorio]);
+		
+		CardEvent nombreEvento = new CardEvent(Event, i);
+		
 		success = new Success(state);
 		contenedor.add(nombreEvento, BorderLayout.CENTER);
 		
@@ -206,6 +212,17 @@ public class Window extends JFrame{
 		panelbtns.add(btnNot);
 		panelbtns.add(btnYes);
 		
+		if(state.getForce()<=0) {
+			reiniciarJuego("te han conquistado!",state);
+		}else if(state.getPoblation()<=0) {
+			reiniciarJuego("tu pueblo se extinguió",state);
+		}else if(state.getTerritory()<=0) {
+			reiniciarJuego("te han conquistado!",state);
+		}
+		
+		
+		
+		
 	}
 	
 
@@ -216,6 +233,24 @@ public class Window extends JFrame{
 		lblTerritory.setText("Territory:   "+state.getTerritory()+ " Km2 ");
 		
 		lblPoblation.setText("Poblation: "+state.getPoblation()+ " peoples ");
+	}
+	
+	
+	public void reiniciarJuego(String tituloModal, State state) {
+		int n = JOptionPane.showConfirmDialog(
+			    contenedor,
+			    "reiniciar juego?",
+			    tituloModal,
+			    JOptionPane.YES_NO_OPTION);
+		
+		if(n==0) {
+			state.setForce(5000);
+			state.setPoblation(5000);
+			state.setTerritory(5000);
+			updateStatusBar(state);
+		}else {
+			System.exit(0);
+		}
 	}
 	
 	
